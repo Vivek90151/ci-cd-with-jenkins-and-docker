@@ -34,4 +34,19 @@ node {
     }
 
 
+    stage("Deploy the Container"){
+    sshagent(['jenkinskey']) {
+
+        sh '''
+        ssh -o StrictHostKeyChecking=no ec2-user@3.113.246.150 "
+        docker stop webcontainer || true
+        docker rm webcontainer || true
+        docker run -p 8001:80 -itd --name webcontainer vivekbhardwaj581/ci-cd-with-jenkins-and-docker
+        "
+        '''
+    }
 }
+}
+
+
+
